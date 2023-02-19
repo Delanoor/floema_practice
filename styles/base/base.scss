@@ -1,0 +1,81 @@
+*,
+*:after,
+*:before {
+  box-sizing: border-box;
+  user-select: none;
+}
+
+html {
+  @extend %cover;
+
+  background-color: $color-contessa;
+  color: $color-quarter-spanish-white;
+  $vw: 100vw;
+  font-size: calc($vw / 1920px * 10px);
+  line-height: 1;
+  // for smooth scroll
+  position: fixed;
+  overflow: hidden;
+
+  @include media("<phone") {
+    font-size: calc($vw / 750px * 10px);
+  }
+}
+
+body {
+  @extend %cover;
+  @extend %description-16;
+
+  font-family: $font-suisse-bp;
+
+  // for smooth scroll
+  position: fixed;
+}
+
+a {
+  color: inherit;
+  outline: none;
+  text-decoration: none;
+}
+
+img {
+  opacity: 0;
+  transition: opacity 0.4s ease;
+  vertical-align: middle;
+
+  &.loaded {
+    opacity: 1;
+  }
+}
+
+canvas {
+  pointer-events: none;
+  position: relative;
+  z-index: z("canvas");
+}
+
+button {
+  background: none;
+  border: none;
+  color: inherit;
+  cursor: pointer;
+  outline: none;
+}
+
+img {
+  vertical-align: middle;
+}
+
+.content {
+  @extend %cover;
+}
+
+[data-animation="label"],
+[data-animation="paragraph"],
+[data-animation="title"] {
+  span {
+    display: inline-block;
+    overflow: hidden;
+    vertical-align: top;
+  }
+}
