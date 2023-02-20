@@ -7,12 +7,13 @@ import map from "lodash/map";
 import Media from "./Media";
 
 export default class {
-  constructor({ gl, scene, sizes }) {
-    // this.id = "discography";
+  constructor({ gl, scene, sizes, transition }) {
+    this.id = "discography";
 
     this.gl = gl;
     this.scene = scene;
     this.sizes = sizes;
+    this.transition = transition;
 
     this.transformPrefix = Prefix("transform");
 
@@ -75,7 +76,35 @@ export default class {
   // Animations
 
   show() {
-    map(this.medias, (media) => media.show());
+    if (this.transition) {
+      const { src } = this.transition.mesh.program.uniforms.tMap.value.image;
+      const texture = window.TEXTURES[src];
+      const media = this.medias.find((media) => media.texture === texture);
+      const scroll = -media.bounds.left - media.bounds.width / 2 + window.innerWidth / 2; // prettier-ignore
+
+      this.update();
+
+      this.transition.animate(
+        {
+          position: { x: 0, y: media.mesh.position.y, z: 0 },
+          rotation: media.mesh.rotation,
+          scale: media.mesh.scale,
+        },
+        (_) => {
+          media.opacity.multiplier = 1;
+
+          map(this.medias, (item) => {
+            if (media !== item) {
+              item.show();
+            }
+          });
+
+          this.scroll.current = this.scroll.target = this.scroll.start = this.scroll.last = scroll; // prettier-ignore
+        }
+      );
+    } else {
+      map(this.medias, (media) => media.show());
+    }
   }
 
   hide() {
@@ -107,7 +136,7 @@ export default class {
   onTouchUp({ x, y }) {}
 
   onWheel({ pixelY }) {
-    this.scroll.target += pixelY;
+    this.scroll.target -= pixelY;
   }
 
   onChange(index) {
@@ -175,10 +204,10 @@ export default class {
       //     gsap.utils.mapRange(0, 1, -0.2, 0.2, index / (this.medias.length - 1))
       //   ) - 0.1;
 
-      // media.mesh.position.y +=
-      //   Math.cos((media.mesh.position.x / this.sizes.width) * Math.PI * 0.1) *
-      //     40 -
-      //   40;
+      media.mesh.position.y +=
+        Math.cos((media.mesh.position.x / this.sizes.width) * Math.PI * 0.1) *
+          40 -
+        40;
     });
   }
 

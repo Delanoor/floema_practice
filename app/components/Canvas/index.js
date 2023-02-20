@@ -2,7 +2,10 @@ import { Camera, Renderer, Transform } from "ogl";
 
 import About from "./About";
 import Home from "./Home";
+import Detail from "./Detail";
 import Discography from "./Discography";
+
+import Transition from "./Transition";
 
 export default class Canvas {
   constructor({ template }) {
@@ -77,11 +80,28 @@ export default class Canvas {
     this.about = null;
   }
 
+  createDetail() {
+    this.detail = new Detail({
+      gl: this.gl,
+      scene: this.scene,
+      sizes: this.sizes,
+      transition: this.transition,
+    });
+  }
+
+  destroyDetail() {
+    if (!this.detail) return;
+
+    this.detail.destroy();
+    this.detail = null;
+  }
+
   createDiscography() {
     this.discography = new Discography({
       gl: this.gl,
       scene: this.scene,
       sizes: this.sizes,
+      transition: this.transition,
     });
   }
 
@@ -100,15 +120,34 @@ export default class Canvas {
     this.onChangeEnd(this.template);
   }
 
-  onChangeStart() {
+  onChangeStart(template, url) {
     if (this.home) {
       this.home.hide();
     }
     if (this.about) {
       this.about.hide();
     }
+    if (this.detail) {
+      this.detail.hide();
+    }
     if (this.discography) {
       this.discography.hide();
+    }
+
+    this.isFromDiscographyToDetail =
+      this.template === "discography" && url.indexOf("detail") > -1;
+    this.isFromDetailToDiscography =
+      this.template === "detail" && url.indexOf("discography") > -1;
+
+    if (this.isFromDiscographyToDetail || this.isFromDetailToDiscography) {
+      this.transition = new Transition({
+        gl: this.gl,
+        scene: this.scene,
+        sizes: this.sizes,
+        url,
+      });
+
+      this.transition.setElement(this.discography || this.detail);
     }
   }
 
@@ -125,11 +164,19 @@ export default class Canvas {
       this.destroyHome();
     }
 
+    if (template === "detail") {
+      this.createDetail();
+    } else if (this.detail) {
+      this.destroyDetail();
+    }
+
     if (template === "discography") {
       this.createDiscography();
     } else if (this.discography) {
       this.destroyDiscography();
     }
+
+    this.template = template;
   }
 
   onTouchDown(e) {
@@ -149,6 +196,10 @@ export default class Canvas {
 
     if (this.home) {
       this.home.onTouchDown(values);
+    }
+
+    if (this.detail) {
+      this.detail.onTouchDown(values);
     }
 
     if (this.discography) {
@@ -178,6 +229,10 @@ export default class Canvas {
       this.about.onTouchMove(values);
     }
 
+    if (this.detail) {
+      this.detail.onTouchMove(values);
+    }
+
     if (this.discography) {
       this.discography.onTouchMove(values);
     }
@@ -205,6 +260,10 @@ export default class Canvas {
       this.home.onTouchUp(values);
     }
 
+    if (this.detail) {
+      this.detail.onTouchUp(values);
+    }
+
     if (this.discography) {
       this.discography.onTouchUp(values);
     }
@@ -225,22 +284,22 @@ export default class Canvas {
       width,
     };
 
+    const values = { sizes: this.sizes };
+
     if (this.about) {
-      this.about.onResize({
-        sizes: this.sizes,
-      });
+      this.about.onResize(values);
     }
 
     if (this.home) {
-      this.home.onResize({
-        sizes: this.sizes,
-      });
+      this.home.onResize(values);
+    }
+
+    if (this.detail) {
+      this.detail.onResize(values);
     }
 
     if (this.discography) {
-      this.discography.onResize({
-        sizes: this.sizes,
-      });
+      this.discography.onResize(values);
     }
   }
 
@@ -257,6 +316,9 @@ export default class Canvas {
   update(scroll) {
     if (this.about) {
       this.about.update(scroll);
+    }
+    if (this.detail) {
+      this.detail.update();
     }
     if (this.discography) {
       this.discography.update();

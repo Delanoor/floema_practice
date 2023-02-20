@@ -2,8 +2,8 @@ import { Mesh, Program } from "ogl";
 
 import gsap from "gsap";
 
-import vertex from "shaders/plane-vertex.glsl";
-import fragment from "shaders/plane-fragment.glsl";
+import vertex from "shaders/discography-vertex.glsl";
+import fragment from "shaders/discography-fragment.glsl";
 
 export default class {
   constructor({ element, gl, geometry, index, scene, sizes }) {
@@ -69,24 +69,6 @@ export default class {
     this.updateX();
   }
 
-  // Animations
-  // show() {
-  //   gsap.fromTo(
-  //     this.program.uniforms.uAlpha,
-  //     {
-  //       value: 0,
-  //     },
-  //     {
-  //       value: 1,
-  //     }
-  //   );
-  // }
-
-  // hide() {
-  //   gsap.to(this.program.uniforms.uAlpha, {
-  //     value: 0,
-  //   });
-  // }
   show() {
     gsap.fromTo(
       this.opacity,
@@ -149,6 +131,7 @@ export default class {
     this.mesh.rotation.z = -0.02 * Math.PI * Math.sin(this.index / frequency);
     this.mesh.position.y = amplitude * Math.sin(this.index / frequency);
 
+    // fade the rest
     this.opacity.target = index === this.index ? 1 : 0.4;
     this.opacity.current = gsap.utils.interpolate(
       this.opacity.current,
@@ -156,7 +139,7 @@ export default class {
       this.opacity.lerp
     );
 
-    this.program.uniforms.uAlpha.value = this.opacity.multiplier;
+    // this.program.uniforms.uAlpha.value = this.opacity.multiplier;
     this.program.uniforms.uAlpha.value =
       this.opacity.multiplier * this.opacity.current;
   }

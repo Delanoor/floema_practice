@@ -35,6 +35,7 @@ export default class Media {
       vertex,
       uniforms: {
         uAlpha: { value: 0 },
+        uSpeed: { value: 0 },
         uViewportSizes: { value: [this.sizes.width, this.sizes.height] },
         tMap: { value: this.texture },
       },
@@ -125,8 +126,10 @@ export default class Media {
       this.extra.y;
   }
 
-  update(scroll) {
+  update(scroll, speed) {
     this.updateX(scroll.x);
     this.updateY(scroll.y);
+
+    this.program.uniforms.uSpeed.value = speed;
   }
 }

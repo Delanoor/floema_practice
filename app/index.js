@@ -83,7 +83,8 @@ class App {
   // when change in page
 
   async onChange({ url, push = true }) {
-    this.canvas.onChangeStart(this.template);
+    // console.log("🚀 ~ file: index.js:86 ~ App ~ onChange ~ url:", url);
+    this.canvas.onChangeStart(this.template, url);
     await this.page.hide();
 
     const res = await window.fetch(url);

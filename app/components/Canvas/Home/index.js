@@ -38,6 +38,12 @@ export default class {
       y: 0,
     };
 
+    this.speed = {
+      current: 0,
+      target: 0,
+      lerp: 0.1,
+    };
+
     this.createGeometry();
     this.createGallery();
 
@@ -98,6 +104,8 @@ export default class {
   }
 
   onTouchDown({ x, y }) {
+    this.speed.target = 1;
+
     this.scrollCurrent.x = this.scroll.x;
     this.scrollCurrent.y = this.scroll.y;
   }
@@ -110,7 +118,9 @@ export default class {
     this.y.target = this.scrollCurrent.y - yDistance;
   }
 
-  onTouchUp({ x, y }) {}
+  onTouchUp({ x, y }) {
+    this.speed.target = 0;
+  }
 
   onWheel({ pixelX, pixelY }) {
     this.x.target += pixelX;
@@ -121,6 +131,17 @@ export default class {
    * Update
    */
   update() {
+    this.speed.current = gsap.utils.interpolate(
+      this.speed.current,
+      this.speed.target,
+      this.speed.lerp
+    );
+
+    const a = this.x.target - this.x.current;
+    const b = this.y.target - this.y.current;
+
+    const speed = Math.sqrt(a * a + b * b) * 0.001;
+
     this.x.current = gsap.utils.interpolate(
       this.x.current,
       this.x.target,
@@ -150,7 +171,6 @@ export default class {
     map(this.medias, (media, index) => {
       // for horizontal dragging
 
-      // const offsetX = this.sizes.width * 0.6;
       const offsetX = this.sizes.width * 0.6;
       const scaleX = media.mesh.scale.x / 2;
 
@@ -181,8 +201,6 @@ export default class {
       // for vertical dragging
 
       const offsetY = this.sizes.height * 0.6;
-      // const offsetY = this.sizes.height * 0.1;
-
       const scaleY = media.mesh.scale.y / 2;
 
       if (this.y.direction === "top") {
@@ -209,7 +227,7 @@ export default class {
         }
       }
 
-      media.update(this.scroll);
+      media.update(this.scroll, this.speed.current);
     });
   }
 
