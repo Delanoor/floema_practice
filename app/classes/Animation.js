@@ -1,12 +1,29 @@
-import Component from "./Component";
+import autoBind from "auto-bind";
+import Prefix from "prefix";
 
-export default class Animation extends Component {
+export default class {
   constructor({ element, elements }) {
-    super({ element, elements });
+    const { animationDelay, animationTarget } = element.dataset;
 
-    this.createObserver();
+    autoBind(this);
 
-    this.animateOut();
+    this.delay = animationDelay;
+
+    this.element = element;
+    this.elements = elements;
+
+    this.target = animationTarget ? element.closest(animationTarget) : element;
+    this.transformPrefix = Prefix("transform");
+
+    this.isVisible = false;
+
+    if ("IntersectionObserver" in window) {
+      this.createObserver();
+
+      this.animateOut();
+    } else {
+      this.animateIn;
+    }
   }
 
   createObserver() {
@@ -18,13 +35,14 @@ export default class Animation extends Component {
           this.animateOut();
         }
       });
-    });
-    this.observer.observe(this.element);
+    }).observe(this.target);
   }
 
-  animateIn() {}
+  animateIn() {
+    this.isVisible = true;
+  }
 
-  animateOut() {}
-
-  onResize() {}
+  animateOut() {
+    this.isVisible = false;
+  }
 }

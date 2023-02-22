@@ -1,10 +1,12 @@
 import { Mesh, Program } from "ogl";
 import gsap from "gsap";
 
+import Detection from "classes/Detection";
+
 import vertex from "shaders/plane-vertex.glsl";
 import fragment from "shaders/plane-fragment.glsl";
 
-export default class Media {
+export default class {
   constructor({ element, geometry, gl, index, scene, sizes }) {
     this.element = element;
     this.gl = gl;
@@ -83,8 +85,9 @@ export default class Media {
 
   // Events
 
-  onResize(sizes, scroll) {
+  onResize(sizes, scroll, width) {
     this.extra = 0;
+    this.widthTotal = width;
 
     this.createBounds(sizes);
     this.updateX(scroll);
@@ -108,18 +111,6 @@ export default class Media {
 
     this.mesh.scale.x = this.sizes.width * this.width;
     this.mesh.scale.y = this.sizes.height * this.height;
-
-    // scaling logic while rotation
-    // const scale = gsap.utils.mapRange(
-    //   0,
-    //   this.sizes.width / 2,
-    //   0.1,
-    //   0,
-    //   Math.abs(this.mesh.position.x)
-    // );
-
-    // this.mesh.scale.x += scale;
-    // this.mesh.scale.y += scale;
   }
 
   updateX(x = 0) {
@@ -135,16 +126,16 @@ export default class Media {
   updateY(y = 0) {
     this.y = (this.bounds.top + y) / window.innerHeight;
 
-    // const extra = Detection.isPhone() ? 20 : 40;
+    const extra = Detection.isPhone() ? 15 : 60;
 
     this.mesh.position.y =
       this.sizes.height / 2 -
       this.mesh.scale.y / 2 -
       this.y * this.sizes.height;
-
     this.mesh.position.y +=
-      Math.cos((this.mesh.position.x / this.sizes.width) * Math.PI * 0.1) * 40 -
-      40;
+      Math.cos((this.mesh.position.x / this.sizes.width) * Math.PI * 0.1) *
+        extra -
+      extra;
   }
 
   update(scroll) {

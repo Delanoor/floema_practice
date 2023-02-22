@@ -11,6 +11,7 @@
   "author": "Hyun Woo Nam",
   "devDependencies": {
     "@babel/core": "^7.20.12",
+    "auto-bind": "^5.0.1",
     "babel-loader": "^9.1.2",
     "clean-webpack-plugin": "^4.0.0",
     "concurrently": "^7.6.0",

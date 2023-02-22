@@ -67,31 +67,45 @@ export default class {
   }
 
   animate(element, onComplete) {
-    const timeline = gsap.timeline();
+    const timeline = gsap.timeline({});
 
-    timeline.to(this.mesh.scale, {
-      duration: 0.9,
-      ease: "expo.inOut",
-      x: element.scale.x,
-      y: element.scale.y,
-      z: element.scale.z,
-    });
+    timeline.to(
+      this.mesh.scale,
+      {
+        duration: 0.9,
+        ease: "expo.inOut",
+        x: element.scale.x,
+        y: element.scale.y,
+        z: element.scale.z,
+      },
+      0
+    );
 
-    timeline.to(this.mesh.position, {
-      duration: 1.3,
-      ease: "expo.inOut",
-      x: element.position.x,
-      y: element.position.y,
-      z: element.position.z,
-    });
+    timeline.to(
+      this.mesh.position,
+      {
+        duration: 1.3,
+        ease: "expo.inOut",
+        x: element.position.x,
+        y: element.position.y,
+        z: element.position.z,
+      },
+      0
+      // "position"
+    );
 
-    timeline.to(this.mesh.rotation, {
-      duration: 1.5,
-      ease: "expo.inOut",
-      x: element.rotation.x,
-      y: element.rotation.y,
-      z: element.rotation.z,
-    });
+    timeline.to(
+      this.mesh.rotation,
+      {
+        duration: 1.5,
+        ease: "expo.inOut",
+        x: element.rotation.x,
+        y: element.rotation.y,
+        z: element.rotation.z,
+      },
+      0
+      // "position-=0.2"
+    );
 
     timeline.call((_) => {
       onComplete();

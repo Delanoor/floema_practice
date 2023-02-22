@@ -10,12 +10,16 @@ import Detail from "pages/Detail";
 import Home from "pages/Home";
 import Navigation from "./components/Navigation";
 
+import Transition from "./components/Transition";
+
 class App {
   constructor() {
-    this.createContent();
+    this.template = window.location.pathname;
 
     this.createCanvas();
+    // this.createContent();
     this.createPreloader();
+    this.createTransition();
     this.createNavigation();
     this.createPages();
 
@@ -49,16 +53,24 @@ class App {
     this.template = this.content.getAttribute("data-template");
   }
 
+  createTransition() {
+    this.transition = new Transition();
+  }
+
   createPages() {
+    this.about = new About();
+    this.discography = new Discography();
+    this.home = new Home();
+
     this.pages = {
-      about: new About(),
-      discography: new Discography(),
-      detail: new Detail(),
-      home: new Home(),
+      "/": this.home,
+      "/about": this.about,
+      "/discography": this.discography,
     };
 
     this.page = this.pages[this.template];
-    this.page.create();
+
+    // this.page.create();
   }
 
   /***
@@ -83,44 +95,69 @@ class App {
   // when change in page
 
   async onChange({ url, push = true }) {
-    // console.log("🚀 ~ file: index.js:86 ~ App ~ onChange ~ url:", url);
-    this.canvas.onChangeStart(this.template, url);
-    await this.page.hide();
+    url = url.replace(window.location.origin, "");
 
-    const res = await window.fetch(url);
+    const page = this.pages[url];
 
-    if (res.status === 200) {
-      // get the page
-      const html = await res.text();
-      const div = document.createElement("div");
+    await this.transition.show({
+      color: page.element.getAttribute("data-color"),
+    });
 
-      if (push) {
-        window.history.pushState({}, "", url);
-      }
-
-      div.innerHTML = html;
-
-      const divContent = div.querySelector(".content");
-      this.template = divContent.getAttribute("data-template");
-
-      this.navigation.onChange(this.template);
-
-      this.content.setAttribute("data-template", this.template);
-      this.content.innerHTML = divContent.innerHTML;
-
-      this.canvas.onChangeEnd(this.template);
-
-      this.page = this.pages[this.template];
-      this.page.create();
-
-      this.onResize();
-
-      this.page.show();
-
-      this.addLinkListeners();
-    } else {
-      console.error("Error");
+    if (push) {
+      window.history.pushState({}, "", url);
     }
+
+    this.template = window.location.pathname;
+
+    this.page.hide();
+
+    this.navigation.onChange(this.template);
+    this.canvas.onChange(this.template);
+
+    this.page = page;
+    this.page.show();
+
+    this.onResize();
+
+    this.transition.hide();
+
+    // this.canvas.onChangeStart(this.template, url);
+    // await this.page.hide();
+
+    // const res = await window.fetch(url);
+
+    // if (res.status === 200) {
+    //   // get the page
+    //   const html = await res.text();
+    //   const div = document.createElement("div");
+
+    //   if (push) {
+    //     window.history.pushState({}, "", url);
+    //   }
+
+    //   div.innerHTML = html;
+
+    //   const divContent = div.querySelector(".content");
+    //   this.template = divContent.getAttribute("data-template");
+
+    //   this.navigation.onChange(this.template);
+
+    //   this.content.setAttribute("data-template", this.template);
+    //   this.content.innerHTML = divContent.innerHTML;
+
+    //   this.canvas.onChangeEnd(this.template);
+
+    //   this.page = this.pages[this.template];
+    //   this.page.create();
+
+    //   this.onResize();
+
+    //   this.page.show();
+
+    //   this.addLinkListeners();
+    // } else {
+    //   console.error("Error");
+    // }
   }
 
   /**
@@ -143,17 +180,29 @@ class App {
     if (this.canvas && this.canvas.onTouchDown) {
       this.canvas.onTouchDown(e);
     }
+
+    if (this.page && this.page.onTouchDown) {
+      this.page.onTouchDown(e);
+    }
   }
 
   onTouchMove(e) {
     if (this.canvas && this.canvas.onTouchMove) {
       this.canvas.onTouchMove(e);
     }
+
+    if (this.page && this.page.onTouchMove) {
+      this.page.onTouchMove(e);
+    }
   }
 
   onTouchUp(e) {
     if (this.canvas && this.canvas.onTouchUp) {
       this.canvas.onTouchUp(e);
+    }
+
+    if (this.page && this.page.onTouchUp) {
+      this.page.onTouchUp(e);
     }
   }
 
@@ -189,6 +238,7 @@ class App {
    *  Listeners
    */
   addEventListeners() {
+    window.addEventListener("popstate", this.onPopState.bind(this));
     window.addEventListener("mousewheel", this.onWheel.bind(this));
 
     window.addEventListener("mousedown", this.onTouchDown.bind(this));
@@ -199,7 +249,6 @@ class App {
     window.addEventListener("touchmove", this.onTouchMove.bind(this));
     window.addEventListener("touchend", this.onTouchUp.bind(this));
 
-    window.addEventListener("popstate", this.onPopState.bind(this));
     window.addEventListener("resize", this.onResize.bind(this));
   }
 
@@ -207,16 +256,26 @@ class App {
     const links = document.querySelectorAll("a");
 
     each(links, (link) => {
-      link.onclick = (event) => {
-        event.preventDefault();
+      const isLocal = link.href.indexOf(window.location.origin) > -1;
 
-        const { href } = link;
+      const isNotEmail = link.href.indexOf("mailto") === -1;
+      const isNotPhone = link.href.indexOf("tel") === -1;
 
-        this.onChange({ url: href });
+      if (isLocal) {
+        link.onclick = (event) => {
+          event.preventDefault();
 
-        // const { href } = link;
-        // this.onChange({ url: href });
-      };
+          this.onChange({
+            url: link.href,
+          });
+        };
+
+        link.onmouseenter = (event) => this.onLinkMouseEnter(link);
+        link.onmouseleave = (event) => this.onLinkMouseLeave(link);
+      } else if (isNotEmail && isNotPhone) {
+        link.rel = "noopener";
+        link.target = "_blank";
+      }
     });
   }
 }

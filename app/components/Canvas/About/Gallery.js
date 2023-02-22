@@ -28,9 +28,9 @@ export default class Gallery {
 
     this.createMedias();
 
-    // this.onResize({
-    //   sizes: this.sizes,
-    // });
+    this.onResize({
+      sizes: this.sizes,
+    });
 
     this.group.setParent(this.scene);
   }
@@ -69,7 +69,9 @@ export default class Gallery {
 
     this.scroll.current = this.scroll.target = 0;
 
-    map(this.medias, (media) => media.onResize(e, this.scroll.current));
+    map(this.medias, (media) =>
+      media.onResize(e, this.scroll.current, this.width)
+    );
   }
 
   onTouchDown({ x, y }) {
@@ -99,7 +101,11 @@ export default class Gallery {
     this.scroll.target -= this.scroll.velocity;
     this.scroll.target += distance;
 
-    this.scroll.current = gsap.utils.interpolate( this.scroll.current, this.scroll.target, this.scroll.lerp ); // prettier-ignore
+    this.scroll.current = gsap.utils.interpolate(
+      this.scroll.current,
+      this.scroll.target,
+      this.scroll.lerp
+    );
 
     map(this.medias, (media, index) => {
       const scaleX = media.mesh.scale.x / 2 + 0.25;

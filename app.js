@@ -62,7 +62,7 @@ const handleLinkResolver = (doc) => {
     return "/about";
   }
 
-  // return "/";
+  return "/";
 };
 
 app.use((req, res, next) => {
@@ -151,19 +151,16 @@ app.get("/", async (req, res) => {
   // const discography = await client.getAllByType("discography", {
   //   fetchLinks: "album.image",
   // });
-  res.render("pages/home", {
+  res.render("base", {
     ...defaults,
   });
 });
 
 app.get("/about", async (req, res) => {
   const defaults = await handleRequest();
-  const about = await client.getSingle("about");
-  // console.log("🚀 ~ file: app.js:155 ~ app.get ~ about", about.data.body);
 
-  res.render("pages/about", {
+  res.render("base", {
     ...defaults,
-    about,
   });
 });
 
@@ -176,7 +173,7 @@ app.get("/discography", async (req, res) => {
   //   fetchLinks: "album.image",
   // });
 
-  res.render("pages/discography", {
+  res.render("base", {
     ...defaults,
   });
 });
@@ -187,7 +184,7 @@ app.get("/detail/:uid", async (req, res) => {
     fetchLinks: "discography.title",
   });
 
-  res.render("pages/detail", {
+  res.render("base", {
     ...defaults,
     album,
   });

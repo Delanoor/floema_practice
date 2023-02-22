@@ -21,6 +21,9 @@ export default class Media {
     this.createTexture();
     this.createProgram();
     this.createMesh();
+    this.createBounds({
+      sizes: this.sizes,
+    });
   }
 
   createTexture() {
@@ -63,23 +66,41 @@ export default class Media {
   }
 
   // Animations
-  show() {
-    gsap.fromTo(
+  show(isPreloaded) {
+    const delay = isPreloaded ? 2.5 : 0;
+
+    this.timelineIn = gsap.timeline({
+      delay: gsap.utils.random(delay, delay + 1.5),
+    });
+
+    this.timelineIn.fromTo(
       this.program.uniforms.uAlpha,
       {
         value: 0,
       },
       {
+        duration: 2,
+        ease: "expo.inOut",
         value: 0.4,
-      }
+      },
+      "start"
+    );
+
+    this.timelineIn.fromTo(
+      this.mesh.position,
+      {
+        z: gsap.utils.random(2, 6),
+      },
+      {
+        duration: 2,
+        ease: "expo.inOut",
+        z: 0,
+      },
+      "start"
     );
   }
 
-  hide() {
-    gsap.to(this.program.uniforms.uAlpha, {
-      value: 0,
-    });
-  }
+  hide() {}
   /**
    * Events
    */
@@ -127,7 +148,7 @@ export default class Media {
   }
 
   update(scroll, speed) {
-    this.updateX(scroll.x);
+    this.updateX();
     this.updateY(scroll.y);
 
     this.program.uniforms.uSpeed.value = speed;

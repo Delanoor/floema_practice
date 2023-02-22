@@ -1,0 +1,33 @@
+/*! ../animations/Highlight */
+
+/*! ../animations/Label */
+
+/*! ../animations/Paragraph */
+
+/*! ../animations/Title */
+
+/*! ./Asyncload */
+
+/*! animations/Button */
+
+/*! animations/Link */
+
+/*! animations/Parallax */
+
+/*! auto-bind */
+
+/*! events */
+
+/*! gsap */
+
+/*! lodash/each */
+
+/*! lodash/map */
+
+/*! prefix */
+
+/*! utils/dom */
+
+/*!*****************************!*\
+  !*** ./app/classes/Page.js ***!
+  \*****************************/

@@ -9,10 +9,30 @@
 */
 
 /*!
+ * CustomEase 3.5.1
+ * https://greensock.com
+ *
+ * @license Copyright 2008-2020, GreenSock. All rights reserved.
+ * Subject to the terms at https://greensock.com/standard-license or for
+ * Club GreenSock members, the agreement issued with that membership.
+ * @author: Jack Doyle, jack@greensock.com
+*/
+
+/*!
  * GSAP 3.11.4
  * https://greensock.com
  *
  * @license Copyright 2008-2022, GreenSock. All rights reserved.
+ * Subject to the terms at https://greensock.com/standard-license or for
+ * Club GreenSock members, the agreement issued with that membership.
+ * @author: Jack Doyle, jack@greensock.com
+*/
+
+/*!
+ * paths 3.11.4
+ * https://greensock.com
+ *
+ * Copyright 2008-2022, GreenSock. All rights reserved.
  * Subject to the terms at https://greensock.com/standard-license or for
  * Club GreenSock members, the agreement issued with that membership.
  * @author: Jack Doyle, jack@greensock.com
@@ -53,8 +73,6 @@
 /*! ./Asyncload */
 
 /*! ./CSSPlugin.js */
-
-/*! ./Colors */
 
 /*! ./Component */
 
@@ -294,6 +312,8 @@
 
 /*! ./components/Preloader */
 
+/*! ./components/Transition */
+
 /*! ./createConsoleLogger */
 
 /*! ./emitter */
@@ -390,15 +410,31 @@
 
 /*! ./utils/stripAnsi.js */
 
+/*! animations/Button */
+
+/*! animations/Link */
+
+/*! animations/Parallax */
+
 /*! ansi-html-community */
 
+/*! auto-bind */
+
+/*! classes/Animation */
+
 /*! classes/Button */
+
+/*! classes/Component */
+
+/*! classes/Detection */
 
 /*! classes/Page */
 
 /*! events */
 
 /*! gsap */
+
+/*! gsap/utils/paths */
 
 /*! html-entities */
 
@@ -434,7 +470,17 @@
 
 /*! tapable/lib/SyncBailHook */
 
+/*! utils/CustomEase */
+
+/*! utils/breakpoints */
+
 /*! utils/colors */
+
+/*! utils/dom */
+
+/*! utils/easings */
+
+/*! utils/math */
 
 /*! utils/text */
 
@@ -447,6 +493,14 @@
 /*!**********************!*\
   !*** ./app/index.js ***!
   \**********************/
+
+/*!**************************!*\
+  !*** ./app/utils/dom.js ***!
+  \**************************/
+
+/*!***************************!*\
+  !*** ./app/utils/math.js ***!
+  \***************************/
 
 /*!***************************!*\
   !*** ./app/utils/text.js ***!
@@ -464,13 +518,17 @@
   !*** ./app/utils/colors.js ***!
   \*****************************/
 
+/*!******************************!*\
+  !*** ./app/utils/easings.js ***!
+  \******************************/
+
 /*!*******************************!*\
   !*** ./app/classes/Button.js ***!
   \*******************************/
 
-/*!*******************************!*\
-  !*** ./app/classes/Colors.js ***!
-  \*******************************/
+/*!********************************!*\
+  !*** ./app/animations/Link.js ***!
+  \********************************/
 
 /*!*********************************!*\
   !*** ./app/animations/Label.js ***!
@@ -483,6 +541,14 @@
 /*!*********************************!*\
   !*** ./app/pages/Home/index.js ***!
   \*********************************/
+
+/*!*********************************!*\
+  !*** ./app/utils/CustomEase.js ***!
+  \*********************************/
+
+/*!**********************************!*\
+  !*** ./app/animations/Button.js ***!
+  \**********************************/
 
 /*!**********************************!*\
   !*** ./app/classes/Animation.js ***!
@@ -497,7 +563,15 @@
   \**********************************/
 
 /*!**********************************!*\
+  !*** ./app/classes/Detection.js ***!
+  \**********************************/
+
+/*!**********************************!*\
   !*** ./app/pages/About/index.js ***!
+  \**********************************/
+
+/*!**********************************!*\
+  !*** ./app/utils/breakpoints.js ***!
   \**********************************/
 
 /*!***********************************!*\
@@ -507,6 +581,14 @@
 /*!***********************************!*\
   !*** ./node_modules/lodash/eq.js ***!
   \***********************************/
+
+/*!************************************!*\
+  !*** ./app/animations/Parallax.js ***!
+  \************************************/
+
+/*!************************************!*\
+  !*** ./app/pages/Detail/Detail.js ***!
+  \************************************/
 
 /*!************************************!*\
   !*** ./node_modules/gsap/index.js ***!
@@ -550,6 +632,10 @@
 
 /*!**************************************!*\
   !*** ./app/components/Navigation.js ***!
+  \**************************************/
+
+/*!**************************************!*\
+  !*** ./app/components/Transition.js ***!
   \**************************************/
 
 /*!**************************************!*\
@@ -637,6 +723,10 @@
   \*****************************************/
 
 /*!*****************************************!*\
+  !*** ./node_modules/auto-bind/index.js ***!
+  \*****************************************/
+
+/*!*****************************************!*\
   !*** ./node_modules/lodash/_Promise.js ***!
   \*****************************************/
 
@@ -711,6 +801,10 @@
 /*!*****************************************!*\
   !*** ./node_modules/webpack/hot/log.js ***!
   \*****************************************/
+
+/*!******************************************!*\
+  !*** ./node_modules/gsap/utils/paths.js ***!
+  \******************************************/
 
 /*!******************************************!*\
   !*** ./node_modules/lodash/_DataView.js ***!
@@ -1313,7 +1407,7 @@
   \********************************************************************************/
 
 /*!***********************************************************************************************************************************************************************************!*\
-  !*** ./node_modules/webpack-dev-server/client/index.js?protocol=ws%3A&hostname=0.0.0.0&port=8080&pathname=%2Fws&logging=info&overlay=true&reconnect=10&hot=true&live-reload=true ***!
+  !*** ./node_modules/webpack-dev-server/client/index.js?protocol=ws%3A&hostname=0.0.0.0&port=8081&pathname=%2Fws&logging=info&overlay=true&reconnect=10&hot=true&live-reload=true ***!
   \***********************************************************************************************************************************************************************************/
 
 /**

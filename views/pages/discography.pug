@@ -1,37 +1,31 @@
-extends ../base.pug
+.discography(data-background="#BC978C" data-color="#f9f1e7") 
+  .discography__wrapper 
+    .discography__titles
+      each item, index in discography
+        .discography__titles__label!=`${home.data.discography}<br>${Numbers(index)}`
+        .discography__titles__title=item.data.title
+      each item, index in discography
+        .discography__titles__label!=`${home.data.discography}<br>${Numbers(index)}`
+        .discography__titles__title=item.data.title
+      each item, index in discography
+        .discography__titles__label!=`${home.data.discography}<br>${Numbers(index)}`
+        .discography__titles__title=item.data.title
 
-block variables 
-  - var template = 'discography'
-
-block content
-  .discography(data-background="#c97164" data-color="#f9f1e7") 
-    .discography__wrapper 
-      .discography__titles
+    .discography__gallery
+      .discography__gallery__wrapper 
         each item, index in discography
-          .discography__titles__label!=`${home.data.discography}<br>${Numbers(index)}`
-          .discography__titles__title=item.data.title
-        each item, index in discography
-          .discography__titles__label!=`${home.data.discography}<br>${Numbers(index)}`
-          .discography__titles__title=item.data.title
-        each item, index in discography
-          .discography__titles__label!=`${home.data.discography}<br>${Numbers(index)}`
-          .discography__titles__title=item.data.title
-
-      .discography__gallery
-        .discography__gallery__wrapper 
-          each item, index in discography
-            each album in item.data.albums
-              a.discography__gallery__link(href=Link(album.discography_album))
-                figure.discography__gallery__media(data-index=index )
-                  img.discography__gallery__media__image(alt=album.discography_album.data.image.alt data-src=album.discography_album.data.image.url)
-      .discography__content
-        each item, index in discography
-          article.discography__article(class=`${index === 0 ? 'discography__article--active' : ''}`)
-            h1.discography__article__title=`${item.data.title} ${home.data.discography}`
-            p.discography__article__description=item.data.description
-        
-      .discography__mobile
-        each item, index in discography
-          .discography__mobile__item
-            .discography__mobile__item__label!=`${home.data.discography}<br>${Numbers(index)}`
-            .discography__mobile__item__title=item.data.title
+          each album in item.data.albums
+            a.discography__gallery__link(href=Link(album.discography_album))
+              figure.discography__gallery__media(data-index=index )
+                img.discography__gallery__media__image(alt=album.discography_album.data.image.alt data-src=album.discography_album.data.image.url)
+    .discography__content
+      each item, index in discography
+        article.discography__article(class=`${index === 0 ? 'discography__article--active' : ''}`)
+          h1.discography__article__title=`${item.data.title} ${home.data.discography}`
+          p.discography__article__description=item.data.description
+      
+    .discography__mobile
+      each item, index in discography
+        .discography__mobile__item
+          .discography__mobile__item__label!=`${home.data.discography}<br>${Numbers(index)}`
+          .discography__mobile__item__title=item.data.title

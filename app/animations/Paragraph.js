@@ -1,55 +1,65 @@
-import gsap from "gsap";
-import Animation from "../classes/Animation";
-import each from "lodash/each";
+import each from 'lodash/each'
 
-import { calculate, split } from "utils/text";
+import Animation from 'classes/Animation'
 
-export default class Praragraph extends Animation {
-  constructor({ element, elements }) {
-    super({ element, elements });
+import { CSS } from 'utils/easings'
+import { calculate, split } from 'utils/text'
 
-    this.elementLinesSpans = split({
-      append: true,
-      element: this.element,
-    });
+export default class extends Animation {
+  constructor ({ element }) {
+    const lines = []
+    const paragraphs = element.querySelectorAll('h1, h2, p')
+
+    if (paragraphs.length !== 0) {
+      each(paragraphs, element => {
+        split({ element })
+        split({ element })
+
+        lines.push(...element.querySelectorAll('span span'))
+      })
+    } else {
+      split({ element })
+      split({ element })
+
+      lines.push(...element.querySelectorAll('span span'))
+    }
+
+    super({
+      element,
+      elements: {
+        lines
+      }
+    })
+
+    this.onResize()
+
+    if ('IntersectionObserver' in window) {
+      this.animateOut()
+    }
   }
 
-  animateIn() {
-    this.timelineIn = gsap.timeline({
-      delay: 0.5,
-    });
+  animateIn () {
+    super.animateIn()
 
-    this.timelineIn.to(this.element, {
-      autoAlpha: 1,
-      duration: 1,
-    });
-
-    //   each(this.elementsLines, (line, index) => {
-    //     this.timelineIn.fromTo(
-    //       line,
-    //       {
-    //         autoAlpha: 0,
-    //         y: "100%",
-    //       },
-    //       {
-    //         autoAlpha: 1,
-    //         delay: index * 0.2,
-    //         duration: 1.3,
-    //         ease: "expo.out",
-    //         y: "0%",
-    //       },
-    //       0
-    //     );
-    //   });
+    each(this.lines, (line, lineIndex) => {
+      each(line, word => {
+        word.style.transition = `transform 1.5s ${lineIndex * 0.1}s ${CSS}`
+        word.style[this.transformPrefix] = 'translateY(0)'
+      })
+    })
   }
 
-  aniamteOut() {
-    gsap.set(this.element, {
-      autoAlpha: 0,
-    });
+  animateOut () {
+    super.animateOut()
+
+    each(this.lines, line => {
+      each(line, word => {
+        word.style[this.transformPrefix] = 'translateY(100%)'
+      })
+    })
   }
 
-  // onResize() {
-  //   this.elementsLines = calculate(this.elementLinesSpans);
-  // }
+  onResize () {
+    this.lines = calculate(this.elements.lines)
+  }
 }

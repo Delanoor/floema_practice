@@ -1,14 +1,21 @@
 import Button from "classes/Button";
 import Page from "classes/Page";
+import { mapEach } from "utils/dom";
 
-export default class Detail extends Page {
+import Detail from "./Detail";
+
+export default class extends Page {
   constructor() {
     super({
-      id: "detail",
+      id: "details",
 
-      element: ".detail",
+      classes: {
+        active: "details--active",
+      },
+
+      element: ".details",
       elements: {
-        button: ".detail__button",
+        details: ".detail",
       },
     });
   }
@@ -16,14 +23,22 @@ export default class Detail extends Page {
   create() {
     super.create();
 
-    this.link = new Button({
-      element: this.elements.button,
+    this.details = mapEach(this.elements.details, (element) => {
+      return new Detail({ element });
     });
+  }
+
+  async show(url) {
+    this.element.classList.add(this.classes.active);
+
+    return super.show(url);
   }
 
   destroy() {
     super.destroy();
 
-    this.link.removeEventListeners();
+    mapEach(this.details, (element) => {
+      element.destroy();
+    });
   }
 }

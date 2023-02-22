@@ -22,17 +22,19 @@ export default class Preloader extends Component {
 
     window.TEXTURES = {};
 
-    split({
-      element: this.elements.title,
-      expression: "<br>",
-    });
-    split({
+    this.elements.titleSpans = split({
+      append: true,
       element: this.elements.title,
       expression: "<br>",
     });
 
-    this.elements.titleSpans =
-      this.elements.title.querySelectorAll("span span");
+    each(this.elements.titleSpans, (element) => {
+      split({
+        append: false,
+        element,
+        expression: "",
+      });
+    });
 
     this.length = 0;
 
@@ -40,23 +42,31 @@ export default class Preloader extends Component {
   }
 
   createLoader() {
-    each(window.ASSETS, (image) => {
-      const texture = new Texture(this.canvas.gl, {
-        generateMipmaps: false,
+    this.animateIn = gsap.timeline();
+
+    this.animateIn.set(this.elements.title, {
+      autoAlpha: 1,
+    });
+
+    this.animateIn.call(() => {
+      window.ASSETS.forEach((image) => {
+        const texture = new Texture(this.canvas.gl, {
+          generateMipmaps: false,
+        });
+
+        const media = new window.Image();
+
+        media.crossOrigin = "anonymous";
+        media.src = image;
+
+        media.onload = (_) => {
+          texture.image = media;
+
+          this.onAssetLoaded();
+        };
+
+        window.TEXTURES[image] = texture;
       });
-
-      const media = new window.Image();
-
-      media.crossOrigin = "anonymous";
-      media.src = image;
-
-      media.onload = (_) => {
-        texture.image = media;
-
-        this.onAssetLoaded();
-      };
-
-      window.TEXTURES[image] = texture;
     });
   }
 

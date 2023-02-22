@@ -22,8 +22,8 @@ export default class Canvas {
       end: 0,
     };
 
-    this.createCamera();
     this.createRenderer();
+    this.createCamera();
     this.createScene();
 
     this.onResize();
@@ -58,26 +58,12 @@ export default class Canvas {
     });
   }
 
-  destroyHome() {
-    if (!this.home) return;
-
-    this.home.destroy();
-    this.home = null;
-  }
-
   createAbout() {
     this.about = new About({
       gl: this.gl,
       scene: this.scene,
       sizes: this.sizes,
     });
-  }
-
-  destroyAbout() {
-    if (!this.about) return;
-
-    this.about.destroy();
-    this.about = null;
   }
 
   createDetail() {
@@ -89,13 +75,6 @@ export default class Canvas {
     });
   }
 
-  destroyDetail() {
-    if (!this.detail) return;
-
-    this.detail.destroy();
-    this.detail = null;
-  }
-
   createDiscography() {
     this.discography = new Discography({
       gl: this.gl,
@@ -105,75 +84,36 @@ export default class Canvas {
     });
   }
 
-  destroyDiscography() {
-    if (!this.discography) return;
-
-    this.discography.destroy();
-    this.discography = null;
-  }
-
   /**
    * Events
    */
 
   onPreloaded() {
-    this.onChangeEnd(this.template);
+    // this.onChangeEnd(this.template);
+    this.createAbout();
+    this.createDiscography();
+    this.createHome();
+
+    this.onChange(this.template, true);
   }
 
-  onChangeStart(template, url) {
-    if (this.home) {
-      this.home.hide();
-    }
-    if (this.about) {
+  onChange(template, isPreloaded) {
+    if (template === "/about") {
+      this.about.show(isPreloaded);
+    } else {
       this.about.hide();
     }
-    if (this.detail) {
-      this.detail.hide();
-    }
-    if (this.discography) {
+
+    if (template === "/discography") {
+      this.discography.show(isPreloaded);
+    } else {
       this.discography.hide();
     }
 
-    this.isFromDiscographyToDetail =
-      this.template === "discography" && url.indexOf("detail") > -1;
-    this.isFromDetailToDiscography =
-      this.template === "detail" && url.indexOf("discography") > -1;
-
-    if (this.isFromDiscographyToDetail || this.isFromDetailToDiscography) {
-      this.transition = new Transition({
-        gl: this.gl,
-        scene: this.scene,
-        sizes: this.sizes,
-        url,
-      });
-
-      this.transition.setElement(this.discography || this.detail);
-    }
-  }
-
-  onChangeEnd(template) {
-    if (template === "about") {
-      this.createAbout();
-    } else if (this.about) {
-      this.destroyAbout();
-    }
-
-    if (template === "home") {
-      this.createHome();
+    if (template === "/") {
+      this.home.show(isPreloaded);
     } else {
-      this.destroyHome();
-    }
-
-    if (template === "detail") {
-      this.createDetail();
-    } else if (this.detail) {
-      this.destroyDetail();
-    }
-
-    if (template === "discography") {
-      this.createDiscography();
-    } else if (this.discography) {
-      this.destroyDiscography();
+      this.home.hide();
     }
 
     this.template = template;
@@ -221,16 +161,12 @@ export default class Canvas {
       y: this.y,
     };
 
-    if (this.home) {
-      this.home.onTouchMove(values);
-    }
-
     if (this.about) {
       this.about.onTouchMove(values);
     }
 
-    if (this.detail) {
-      this.detail.onTouchMove(values);
+    if (this.home) {
+      this.home.onTouchMove(values);
     }
 
     if (this.discography) {
@@ -258,10 +194,6 @@ export default class Canvas {
 
     if (this.home) {
       this.home.onTouchUp(values);
-    }
-
-    if (this.detail) {
-      this.detail.onTouchUp(values);
     }
 
     if (this.discography) {
@@ -317,9 +249,7 @@ export default class Canvas {
     if (this.about) {
       this.about.update(scroll);
     }
-    if (this.detail) {
-      this.detail.update();
-    }
+
     if (this.discography) {
       this.discography.update();
     }

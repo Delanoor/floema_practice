@@ -5,6 +5,17 @@
   // background: $color-quicksand;
   // color: $color-quarter-spanish-white;
 
+  transform: translateY(100%);
+  transition: opacity 0.5s 0.5s ease, transform 0s 0.5s,
+    visibility 0.5s 0.5s ease;
+
+  &--active {
+    @extend %page--active;
+
+    transform: translateY(0);
+    transition-delay: 0;
+  }
+
   @include media("<phone") {
     height: auto;
   }

@@ -3,6 +3,9 @@
 
   // background: $color-cadet-blue;
   // color: $color-bright-gray;
+  &--active {
+    @extend %page--active;
+  }
 }
 .about__wrapper {
   padding-top: 10rem;

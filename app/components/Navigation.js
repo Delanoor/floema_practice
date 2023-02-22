@@ -1,8 +1,11 @@
 import gsap from "gsap";
+import Link from "animations/Link";
+
 import Component from "../classes/Component";
 import { COLOR_BRIGHT_GRAY, COLOR_QUARTER_SPANISH_WHITE } from "utils/colors";
+import { mapEach } from "utils/dom";
 
-export default class Navigation extends Component {
+export default class extends Component {
   constructor({ template }) {
     super({
       element: ".navigation",
@@ -11,38 +14,31 @@ export default class Navigation extends Component {
         links: ".navigation__list__link",
       },
     });
+
+    this.links = mapEach(this.elements.links, (element) => {
+      return new Link({
+        element,
+      });
+    });
+
     this.onChange(template);
   }
 
   onChange(template) {
-    if (template === "about") {
-      gsap.to(this.element, {
+    if (template === "/about") {
+      gsap.set(this.element, {
         color: COLOR_BRIGHT_GRAY,
-        duration: 1.5,
       });
-      gsap.to(this.elements.items[0], {
-        autoAlpha: 1,
-        delay: 0.75,
-        duration: 0.75,
-      });
-      gsap.to(this.elements.items[1], {
-        autoAlpha: 0,
-        duration: 0.75,
-      });
+
+      gsap.set(this.elements.items[0], { autoAlpha: 1 });
+      gsap.set(this.elements.items[1], { autoAlpha: 0 });
     } else {
-      gsap.to(this.element, {
+      gsap.set(this.element, {
         color: COLOR_QUARTER_SPANISH_WHITE,
-        duration: 1.5,
       });
-      gsap.to(this.elements.items[0], {
-        autoAlpha: 0,
-        duration: 0.75,
-      });
-      gsap.to(this.elements.items[1], {
-        autoAlpha: 1,
-        delay: 0.75,
-        duration: 0.75,
-      });
+
+      gsap.set(this.elements.items[0], { autoAlpha: 0 });
+      gsap.set(this.elements.items[1], { autoAlpha: 1 });
     }
   }
 }

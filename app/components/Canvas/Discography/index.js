@@ -75,7 +75,7 @@ export default class {
 
   // Animations
 
-  show() {
+  async show() {
     if (this.transition) {
       const { src } = this.transition.mesh.program.uniforms.tMap.value.image;
       const texture = window.TEXTURES[src];
@@ -189,7 +189,10 @@ export default class {
     this.scroll.last = this.scroll.current;
 
     const index = Math.floor(
-      Math.abs(this.scroll.current / this.scroll.limit) *
+      Math.abs(
+        (this.scroll.current - this.medias[0].bounds.width / 2) /
+          this.scroll.limit
+      ) *
         (this.medias.length - 1)
     );
 
@@ -199,10 +202,10 @@ export default class {
 
     map(this.medias, (media, index) => {
       media.update(this.scroll.current, this.index);
-      // media.mesh.rotation.z =
-      //   Math.abs(
-      //     gsap.utils.mapRange(0, 1, -0.2, 0.2, index / (this.medias.length - 1))
-      //   ) - 0.1;
+      media.mesh.rotation.z =
+        Math.abs(
+          gsap.utils.mapRange(0, 1, -0.2, 0.2, index / (this.medias.length - 1))
+        ) - 0.1;
 
       media.mesh.position.y +=
         Math.cos((media.mesh.position.x / this.sizes.width) * Math.PI * 0.1) *

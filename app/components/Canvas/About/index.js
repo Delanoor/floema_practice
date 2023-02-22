@@ -17,10 +17,6 @@ export default class {
     this.onResize({
       sizes: this.sizes,
     });
-
-    this.group.setParent(scene);
-
-    this.show();
   }
 
   createGeometry() {
@@ -43,10 +39,14 @@ export default class {
   }
 
   show() {
+    this.group.setParent(this.scene);
+
     map(this.galleries, (gallery) => gallery.show());
   }
 
   hide() {
+    this.group.setParent(null);
+
     map(this.galleries, (gallery) => gallery.hide());
   }
 
